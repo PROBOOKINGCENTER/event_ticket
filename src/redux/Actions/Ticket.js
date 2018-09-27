@@ -14,7 +14,8 @@ export const saveTicket = (values)=>{
             type:'SAVE_TICKET_PENDING',
         })
         return axios({url:`${BASE_URL}/registration/${_id}`,
-            data:values
+            data:values,
+            method:_method
         }).then(results=>{
             dispatch({type:'SAVE_TICKET_SUCCESS', payload:results.data})
         }).catch(err =>{

@@ -1,6 +1,7 @@
 const initialState = {
     ticket:{data:null, isLoading:true, isRejected:false}
 }
+
 export default (state = initialState, action)=>{
     switch(action.type){
         case 'SAVE_TICKET_PENDING':

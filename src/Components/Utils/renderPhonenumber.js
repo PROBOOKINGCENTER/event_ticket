@@ -22,7 +22,7 @@ import {  FormGroup, Label, Input, FormFeedback, } from 'reactstrap';
     return (
         <FormGroup> 
         <Label>{label}{required ? '*': null}</Label>
-        <Input name={input.name} value={this.state.value} onChange={this.phoneMask} invalid={touched && error && true} type={type} placeholder={placeholder} autoFocus={autoFocus} />
+        <Input {...input} value={this.state.value} onChange={this.phoneMask} invalid={touched && error && true} type={type} placeholder={placeholder} autoFocus={autoFocus} />
         {touched  && error && <FormFeedback tooltip>{error}</FormFeedback>}
         </FormGroup>
     )

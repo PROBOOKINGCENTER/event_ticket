@@ -7,7 +7,7 @@ import { Field, reduxForm } from 'redux-form'
 import renderField from '../Components/Utils/renderFields';
 import renderPhonenumber from '../Components/Utils/renderPhonenumber';
 import queryString from 'query-string'
-import {connect} from 'react-redux'
+import {saveTicket} from '../redux/Actions/Ticket';
 class Ticket extends Component {
   constructor(props) {
     super(props)
@@ -15,13 +15,13 @@ class Ticket extends Component {
   }
   componentDidMount() {
     const parsed = queryString.parse(this.props.location.search);
-    this.props.initialize({company_id:parsed.company_id})
+    this.props.initialize({company_id:parsed.company_id,event_id:this.props.match.params.month})
   }
   handleSubmit(values){
-    
+    this.props.dispatch(saveTicket(values))
   }
   render() {
-    const { match,location,submitting,handleSubmit } = this.props
+    const { match,location,submitting,handleSubmit,pristine,reset,ticket } = this.props
    
     return (
       <div>
@@ -47,7 +47,7 @@ class Ticket extends Component {
             </Row>
             <Field name="company_name"  type="text" component={renderField} label="ชื่อบริษัท" placeholder="บริษัทของคุณ" />
             
-          <Button type="submit" disabled={submitting}>ลงทะเบียน</Button>
+          <Button type="submit"  disabled={submitting}>ลงทะเบียน</Button>
         </Form>
       </div>
     )
@@ -55,7 +55,7 @@ class Ticket extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    prop: state.prop
+    ticket: state.ticketReducers.ticket
   }
 }
 function validate  (values){
@@ -72,15 +72,15 @@ function validate  (values){
   if(!values.email){
     errors.email ="ต้องการฟิลด์นี้"
 
-  }else if(values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]\.[A-Z]{2,4}/i.test(values.email)){
-    errors.email ="คุณป้อนอีเมลไม่ถูกรูปแบบ "
+  }else if(values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9._%+-]+\.[A-Z]{2,4}/i.test(values.email)){
+    errors.email ="คุณป้อนอีเมลไม่ถูกรูปแบบ"
   } 
   if(!values.company_name){
     errors.company_name = "ต้องการฟิลด์นี้"
   }
   if(!values.phone_num){
     errors.phone_num ="ต้องการฟิลด์นี้"
-  }else if(values.phone_num && !/^[0-9]{1}\([0-9]{2}\)\-[0-9]{3}\-[0-9]{4}/i.test(values.phone_num)){
+  }else if(values.phone_num && !/[0-9]{1}\([0-9]{2}\)\-[0-9]{3}\-[0-9]{4}/i.test(values.phone_num)){
     errors.phone_num = "รูปแบบเบอร์โทรศัพท์ไม่ถูกต้อง"
   }
   return errors
@@ -89,5 +89,6 @@ const form = reduxForm({
   form:'Ticket',
   validate
 })
+
 Ticket = connect(mapStateToProps)(Ticket)
 export default  form(Ticket)
