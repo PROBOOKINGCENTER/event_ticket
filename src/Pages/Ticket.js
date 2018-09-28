@@ -6,7 +6,7 @@ import { Row, Col, Button, Form, FormGroup, Label, Input, FormText } from 'react
 import { Field, reduxForm } from 'redux-form'
 import renderField from '../Components/Utils/renderFields';
 import renderPhonenumber from '../Components/Utils/renderPhonenumber';
-import queryString from 'query-string'
+
 import {saveTicket} from '../redux/Actions/Ticket';
 class Ticket extends Component {
   constructor(props) {
@@ -14,11 +14,16 @@ class Ticket extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   componentDidMount() {
-    const parsed = queryString.parse(this.props.location.search);
+    const parsed = require('query-string').parse(this.props.location.search);
     this.props.initialize({company_id:parsed.company_id,event_id:this.props.match.params.month})
   }
-  handleSubmit(values){
-    this.props.dispatch(saveTicket(values))
+  handleSubmit =(values)=>{
+   return this.props.dispatch(saveTicket(values)).then(()=>{
+        if(!this.props.isRejected){
+          alert("success")
+        }
+     })
+      
   }
   render() {
     const { match,location,submitting,handleSubmit,pristine,reset,ticket } = this.props
