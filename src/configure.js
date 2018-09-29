@@ -1,3 +1,3 @@
 module.exports = {
-    BASE_URL:'http://localhost:3090'
+    BASE_URL:'https://probookingcenter.bamboo.in.th'
 }
